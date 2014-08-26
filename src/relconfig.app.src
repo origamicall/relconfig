@@ -1,0 +1,12 @@
+{application, relconfig,
+ [
+  {description, "Reloader Configuration"},
+  {vsn, "1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {mod, { relconfig_app, []}},
+  {env, []}
+ ]}.
