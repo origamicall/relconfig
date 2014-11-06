@@ -43,10 +43,10 @@ init([]) ->
     {ok, #infoConfig{dataConfig = []}}.
 
 
-handle_call({reload_config, App, Par}, _From, State) ->
-    ConfigPath = get_config_path(App, Par),
+handle_call({reload_config, App}, _From, State) ->
+    ConfigPath = get_config_path(App, cfg_path),
     NewState = load_file(ConfigPath, State),
-    {reply, ok, NewState};
+    {reply, NewState#infoConfig.dataConfig, NewState};
     
 handle_call(get_all_config, _From, State) ->
     {reply, State#infoConfig.dataConfig, State};
@@ -107,8 +107,8 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 
-reload_config(App,Par) ->
-    gen_server:call(?MODULE, {reload_config, App, Par}).
+reload_config(App) ->
+    gen_server:call(?MODULE, {reload_config, App}).
 	
 
 get_all_config() ->
@@ -132,10 +132,10 @@ get_config_path(App, Par) ->
 		{ok, Config} -> Config;
 		undefined ->
 			io:format("Erro not file found ~n", []),
-			ok;
+			exit(0);
 		Reason ->
 			io:format("Error config file:~n App: ~p Par: ~p Reason: ~p ~n", [App, Par, Reason]),
-			ok
+			exit(0)
 	end.
 
 
@@ -152,7 +152,7 @@ load_file(File, State) ->%, Type, Elements) ->
 	    lists:foldl(fun search_c/2, State#infoConfig{dataConfig=[]}, Data);
 	{error, Reason} ->
 		ExitText = lists:flatten(File ++ "Line: " ++ file:format_error(Reason)),
-		io:format("ERROR config file cfg ~n ~s", [ExitText]),
+		io:format("ERROR al cargar el fichero acd.cfg ~n ~s~n", [ExitText]),
 		exit(ExitText)
 end.
 

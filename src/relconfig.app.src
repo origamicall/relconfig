@@ -1,6 +1,6 @@
 {application, relconfig,
  [
-  {description, "Reloader Configuration"},
+  {description, "Config Reloader"},
   {vsn, "1"},
   {registered, []},
   {applications, [
